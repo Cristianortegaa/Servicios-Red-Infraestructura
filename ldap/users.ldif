@@ -1,0 +1,12 @@
+# carpeta de usuarios
+dn: ou=users,dc=iesluisvives,dc=org
+objectClass: organizationalUnit
+ou: users
+
+# usuario alumno1
+dn: uid=alumno1,ou=users,dc=iesluisvives,dc=org
+objectClass: inetOrgPerson
+uid: alumno1
+cn: Alumno Uno
+sn: Vives
+userPassword: LuisVives123!

@@ -1,0 +1,4 @@
+zone "iesluisvives.org" {
+    type master;
+    file "/etc/bind/db.iesluisvives.org";
+};

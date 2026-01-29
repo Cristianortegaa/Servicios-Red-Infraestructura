@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  dns:
+    image: ubuntu/bind9:latest
+    container_name: dns-server
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - ./dns/named.conf.local:/etc/bind/named.conf.local
+      - ./dns/db.iesluisvives.org:/etc/bind/db.iesluisvives.org
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.2
+
+  ldap:
+    image: osixia/openldap:1.5.0
+    container_name: ldap-server
+    environment:
+      - LDAP_DOMAIN=iesluisvives.org
+      - LDAP_ADMIN_PASSWORD=admin
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.50
+
+  backend-daw:
+    image: nginx:alpine
+    container_name: backend-daw
+    volumes:
+      - ./backend-daw:/usr/share/nginx/html
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.20
+
+  backend-dam:
+    image: httpd:alpine
+    container_name: backend-dam
+    volumes:
+      - ./backend-dam:/usr/local/apache2/htdocs
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.30
+
+  proxy:
+    image: bitnamisecure/nginx:latest
+    container_name: nginx-proxy
+    volumes:
+      - ./nginx-proxy/default.conf:/opt/bitnami/nginx/conf/server_blocks/my_proxy.conf:ro
+    ports:
+      - "8080:8080"
+    networks:
+      vives-net:
+        ipv4_address: 192.168.200.100
+
+networks:
+  vives-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.200.0/24

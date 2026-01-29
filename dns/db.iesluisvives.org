@@ -1,0 +1,12 @@
+$TTL    86400
+@       IN      SOA     ns1.iesluisvives.org. admin.iesluisvives.org. (
+                        2026012901 ; Serial
+                        3600       ; Refresh
+                        1800       ; Retry
+                        604800     ; Expire
+                        86400 )    ; Minimum
+;
+@       IN      NS      ns1.iesluisvives.org.
+ns1     IN      A       192.168.200.2    ; IP del propio servidor DNS
+ldap    IN      A       192.168.200.50   ; IP del servidor LDAP (la usaremos luego)
+@       IN      A       192.168.200.100  ; iesluisvives.org -> IP del Proxy
