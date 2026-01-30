@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   dns:
@@ -10,6 +10,8 @@ services:
     volumes:
       - ./dns/named.conf.local:/etc/bind/named.conf.local
       - ./dns/db.iesluisvives.org:/etc/bind/db.iesluisvives.org
+    dns:
+      - 192.168.200.2
     networks:
       vives-net:
         ipv4_address: 192.168.200.2
@@ -20,6 +22,10 @@ services:
     environment:
       - LDAP_DOMAIN=iesluisvives.org
       - LDAP_ADMIN_PASSWORD=admin
+    dns:
+      - 192.168.200.2
+    volumes:
+      - ./ldap:/var/lib/openldap
     networks:
       vives-net:
         ipv4_address: 192.168.200.50
@@ -29,6 +35,8 @@ services:
     container_name: backend-daw
     volumes:
       - ./backend-daw:/usr/share/nginx/html
+    dns:
+      - 192.168.200.2
     networks:
       vives-net:
         ipv4_address: 192.168.200.20
@@ -38,17 +46,22 @@ services:
     container_name: backend-dam
     volumes:
       - ./backend-dam:/usr/local/apache2/htdocs
+    dns:
+      - 192.168.200.2
     networks:
       vives-net:
         ipv4_address: 192.168.200.30
 
   proxy:
-    image: bitnamisecure/nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: nginx-proxy
     volumes:
-      - ./nginx-proxy/default.conf:/opt/bitnami/nginx/conf/server_blocks/my_proxy.conf:ro
+      - ./nginx-proxy/default.conf:/etc/nginx/conf.d/default.conf
+
     ports:
-      - "8080:8080"
+      - "8080:80"
     networks:
       vives-net:
         ipv4_address: 192.168.200.100

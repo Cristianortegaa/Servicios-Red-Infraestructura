@@ -7,6 +7,6 @@ $TTL    86400
                         86400 )    ; Minimum
 ;
 @       IN      NS      ns1.iesluisvives.org.
-ns1     IN      A       192.168.200.2    ; IP del propio servidor DNS
-ldap    IN      A       192.168.200.50   ; IP del servidor LDAP (la usaremos luego)
-@       IN      A       192.168.200.100  ; iesluisvives.org -> IP del Proxy
+ns1     IN      A       192.168.200.2
+ldap    IN      A       192.168.200.50
+@       IN      A       192.168.200.100
